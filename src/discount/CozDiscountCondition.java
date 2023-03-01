@@ -2,7 +2,7 @@ package discount;
 
 import java.util.Scanner;
 
-public class CozDiscountCondition {
+public class CozDiscountCondition implements DiscountCondition {
     // 할인율
     private int discountAmount;
 

@@ -1,4 +1,4 @@
-import discount.CozDiscountCondition;
+import discount.DiscountCondition;
 import products.Product;
 import products.ProductRepository;
 
@@ -6,8 +6,22 @@ import java.util.Scanner;
 
 public class Kiosk {
     ProductRepository productRepository = new ProductRepository();
-    CozDiscountCondition cozDiscountCondition = new CozDiscountCondition(500);
+    DiscountCondition discountCondition;
     Scanner scanner = new Scanner(System.in);
+
+    // 의존성 주입을 위한 생성자
+    /* 여기서 직접 cozDiscountCondition 객체를 생성하게 되면
+    *  나중에 할인 조건이 바뀌거나 할 때 변화하기가 어렵다
+    *  객체간의 결합도, 의존도를 낮추기 위해서
+    *  의존성 주입을 해줘야 하는데
+    *  지금 같은 경우 의존성이 주입될 때 .discount 라는 메소드를 무조건 가지고 있어야 하며
+    *  다형성을 통해서 다른 타입의 객체가 들어와도 상위 참조변수로 할당하여 각각 다른 기능을
+    *  수행하게 끔 해야함
+    * */
+    public Kiosk(DiscountCondition discountCondition) {
+        this.discountCondition = discountCondition;
+    }
+
 
     // 메뉴를 보여줘야함
 
@@ -27,7 +41,7 @@ public class Kiosk {
     }
 
     private void order(Product orderedMenu) {
-        int price = cozDiscountCondition.discount(orderedMenu.getPrice());
+        int price = discountCondition.discount(orderedMenu.getPrice());
         System.out.println("주문이 완료되었습니다.");
         System.out.printf("주문 상품 : %s %s\n", orderedMenu.getName(), orderedMenu.getOptionToString());
         System.out.printf("가격 : %d", price);
